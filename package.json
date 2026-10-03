@@ -1,13 +1,43 @@
 {
   "name": "company-reservation-beta",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "concurrently \"node --watch server.js\" \"vite --host 0.0.0.0\"",
+    "dev:server": "node --watch server.js",
+    "dev:client": "vite --host 0.0.0.0",
+    "build": "vite build",
     "start": "node server.js",
-    "dev": "node --watch server.js",
     "seed": "node seed.js",
-    "test": "node --test test/api.test.js"
+    "test": "node --test test/api.test.js",
+    "check": "npm test && npm run build && node --check server.js && node --check seed.js"
   },
-  "engines": { "node": ">=24" }
+  "dependencies": {
+    "@fontsource/manrope": "^5.3.0",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.0.5"
+  },
+  "engines": {
+    "node": ">=24"
+  }
 }

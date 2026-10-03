@@ -1,0 +1,5 @@
+import * as React from 'react'; import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'; import {cn} from '@/lib/utils'
+const DropdownMenu=DropdownMenuPrimitive.Root,DropdownMenuTrigger=DropdownMenuPrimitive.Trigger
+const DropdownMenuContent=React.forwardRef(({className,sideOffset=6,...p},r)=><DropdownMenuPrimitive.Portal><DropdownMenuPrimitive.Content ref={r} sideOffset={sideOffset} className={cn('z-[70] min-w-[10rem] overflow-hidden rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-xl',className)} {...p}/></DropdownMenuPrimitive.Portal>);DropdownMenuContent.displayName='DropdownMenuContent'
+const DropdownMenuItem=React.forwardRef(({className,...p},r)=><DropdownMenuPrimitive.Item ref={r} className={cn('relative flex cursor-default select-none items-center gap-2 rounded-md px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent data-[disabled]:opacity-50',className)} {...p}/>);DropdownMenuItem.displayName='DropdownMenuItem'
+export {DropdownMenu,DropdownMenuTrigger,DropdownMenuContent,DropdownMenuItem}

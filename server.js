@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 
 const ROOT = fileURLToPath(new URL('.', import.meta.url));
-const PUBLIC = join(ROOT, 'public');
+const PUBLIC = join(ROOT, 'dist');
 const DB_PATH = process.env.DB_PATH || join(ROOT, 'data', 'companies.db');
 const PORT = Number(process.env.PORT || 3000);
 export const TEAMS = ['Таллин', 'Токио', 'Вавилон', 'Сеул'];
@@ -128,14 +128,16 @@ async function api(req, res, url) {
   }
   return false;
 }
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml'};
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon','.woff2':'font/woff2'};
 export const server=createServer(async(req,res)=>{
   try {
     const url=new URL(req.url,'http://localhost');
     if(url.pathname.startsWith('/api/')) { const handled=await api(req,res,url); if(handled===false)error(res,404,'Маршрут не найден'); return; }
     const rel=url.pathname==='/'?'index.html':url.pathname.slice(1); const safe=normalize(rel).replace(/^(\.\.(\/|\\|$))+/, ''); const file=join(PUBLIC,safe);
-    if(!file.startsWith(PUBLIC)||!existsSync(file)) return error(res,404,'Файл не найден');
-    const data=await readFile(file); res.writeHead(200,{'content-type':mime[extname(file)]||'application/octet-stream','content-length':data.length}); res.end(data);
+    if(!file.startsWith(PUBLIC)) return error(res,404,'Файл не найден');
+    const target=existsSync(file) ? file : (!extname(file) ? join(PUBLIC,'index.html') : null);
+    if(!target || !existsSync(target)) return error(res,extname(file)?404:503,extname(file)?'Файл не найден':'Frontend не собран. Выполните npm run build');
+    const data=await readFile(target); res.writeHead(200,{'content-type':mime[extname(target)]||'application/octet-stream','content-length':data.length}); res.end(data);
   } catch(e){ console.error(e); if(!res.headersSent) error(res,e.status||500,e.status?e.message:'Внутренняя ошибка сервера'); else res.end(); }
 });
 if(process.env.NODE_ENV!=='test') server.listen(PORT,()=>console.log(`Company Reservation Beta: http://localhost:${PORT}`));
