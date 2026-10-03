@@ -1,9 +1,5 @@
 node_modules/
 dist/
 .DS_Store
-data/*.db-shm
-data/*.db-wal
-
-data/*.db
-
+data/
 artifacts/
